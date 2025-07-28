@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Exit script on any error
+set -e
+
+echo "Updating system packages..."
+sudo yum update -y
+
+echo "Adding Jenkins repository..."
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+echo "Importing Jenkins GPG key..."
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+echo "Upgrading packages..."
+sudo yum upgrade -y
+
+echo "Installing Java 17 (Amazon Corretto)..."
+sudo yum install java-17-amazon-corretto -y
+
+echo "Installing Jenkins..."
+sudo yum install jenkins -y
+
+echo "Enabling Jenkins service..."
+sudo systemctl enable jenkins
+
+echo "Starting Jenkins service..."
+sudo systemctl start jenkins
+
+echo "Jenkins installation and setup complete."
+echo "To check Jenkins status, run: sudo systemctl status jenkins"
